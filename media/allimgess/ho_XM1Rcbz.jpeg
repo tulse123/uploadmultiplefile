@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms</title>
+    <link rel="stylesheet" href="ho_files/form1.css">
+    <link rel="stylesheet" href="ho_files/script.js">
+    <link rel="stylesheet" href="ho_files/intlTelInput.css">
+    <script src="ho_files/intlTelInput.min.js"></script>
+    <script src="ho_files/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+ 
+</head>
+<body>
+    <a href="http://127.0.0.1:5000/logout">logout</a>
+    <div class="container">
+        <form id="contact" action="#" onsubmit="searchImages(event)" method="POST">
+            <div class="row">
+                <h4>FPS</h4>
+                <select name="fps" id="fps">
+                    <option value="5" selected="selected">5</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                  </select>
+            </div>
+            <div class="row">
+                <h4>Resolution</h4>
+                <select name="resolution" id="resolution">
+                    <option value="720" selected="selected">720</option>
+                    <option value="1080">1080</option>
+                    <option value="1440">1440</option>
+                    <option value="1536">11536</option>
+                    <option value="2160">2160</option>
+                    <option value="3072">3072</option>
+                  </select>
+            </div>
+            <div class="row">
+                <h4>Depth Mode</h4>
+                <select name="depth_mode" id="depth_mode">
+                    <option value="nfovu" selected="selected">NFOV-UNBINNED</option>
+                    <option value="wfovb">WFOV-2*2 BINNED</option>
+                    <option value="nfovb">NFOV-2*2 BNNED</option>
+                    <option value="wfovu">WFOU-unbinned</option>
+                  </select>
+            </div>
+            <div class="row">
+                <h4>Select value</h4>
+                <div class="input-group"><input id="payment-method-card" type="radio" name="rgdb" onchange="valueChanged(this)">
+                    <label for="payment-method-card"><span><i class="fa fa-cc-visa"></i>Rgbd</span></label>
+                    <input id="payment-method-paypal" type="radio" name="hdr" onchange="valueChanged(this)"><label for="payment-method-paypal">
+                         <span><i class="fa fa-cc-paypal"></i>Hdr</span></label></div>
+            </div>
+            <div class="row" id="tilt">
+                <h4>Tilt</h4>
+                <div class="col-half">
+                    <input type="text" placeholder="Min" id="tiltMin" name="tilt">
+                </div>
+                <div class="col-half">
+                    <input type="text" placeholder="Max" id="tiltMax" name="tilt">
+                </div>
+                <div class="col-half">
+                    <input type="text" placeholder="Interval" id="tiltAverage" name="tilt">
+                </div>
+            </div>
+            <div class="row" id="pan">
+                <h4>Pan</h4>
+                <div class="col-half">
+                    <input type="text" placeholder="Min" id="panMin" name="pan">
+                </div>
+                <div class="col-half">
+                    <input type="text" placeholder="Max" id="panMax" name="pan">
+                </div>
+                <div class="col-half">
+                    <input type="text" placeholder="Interval" id="panAverage" name="pan">
+                </div>
+            </div>
+            <h4>Output</h4>
+                <input type="text" placeholder="Output" name="output">
+            <div class="row">
+                <h4>Auto</h4>
+                <input type="checkbox" id="new" name="auto" value="Bike" onchange="eventOccur()">
+                <label for="new"> Auto</label><br>
+            </div>
+            <button class="button button1" id="button" type="submit">Capture</button>
+        </form>
+    </div>
+ 
+    <!-- Javascript to initialize the code list -->
+  <script>
+    function valueChanged(element){
+        if(element.name == 'rgdb'){
+            document.getElementById("payment-method-paypal").checked=false;
+        }
+        else if(element.name=='hdr'){
+            document.getElementById("payment-method-card").checked=false;
+        }
+    }
+    function eventOccur(){
+    if(document.getElementById('new').checked) {
+        let tilt=document.getElementById("tilt");
+        let pan=document.getElementById("pan");
+        console.log("checked")
+        tilt.style.display="none";
+        pan.style.display="none";
+        let tiltMin=document.getElementById("tiltMin")
+        tiltMin.value=""
+        let tiltMax=document.getElementById("tiltMax")
+        tiltMax.value=""
+        let tiltAverage=document.getElementById("tiltAverage")
+        tiltAverage.value=""
+        let panMin=document.getElementById("panMin")
+        panMin.value=""
+        let panMax=document.getElementById("panMax")
+        panMax.value=""
+        let panAverage=document.getElementById("panAverage")
+        panAverage.value=""
+        
+
+    }
+    else{
+        tilt.style.display="block";
+        pan.style.display="block";
+    }
+
+}
+
+function searchImages(e) {
+    e.preventDefault();
+    const form=document.getElementById("contact")
+    const formElement=form.querySelectorAll("input,select")
+    let data={}
+    const tilt = []
+    const pan = []
+    for(let element of formElement){
+        if (element.value !== ""){
+            if(element.type === 'checkbox' || element.type === 'radio'){
+                data[element.name]= true?element.checked:false 
+            }else{
+                if (element.name==='tilt'){
+                    tilt.push(element.value)
+                }else if(element.name ==='pan'){
+                    pan.push(element.value)
+                }else{
+                    data[element.name]=element.value
+                }
+            }
+        }
+    }
+    if(tilt.length>0){
+        data['tilt'] = tilt
+    }
+    if(pan.length>0){
+        data['pan'] = pan
+    }
+    console.log("dddddddddddd",data)
+    $.ajax({
+        url: '/sendData',
+        type: 'POST',
+        data:JSON.stringify(data),
+        success: function(res){
+            console.log("res", res)
+            for(let element of formElement){
+                if(element.type==="checkbox" || element.type==="radio"){
+                    element.checked=false;
+                }
+                else{
+                    element.value="";
+                }
+            }
+
+        }
+    })
+  console.log('ok')
+}
+
+  </script>
+
+</body></html>

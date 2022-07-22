@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% block title %}Test page
+{% endblock %}
+{% block content %}
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="exampleFormControlFile1">Example file input</label>
+      <input required type="file" name="images" multiple class="form-control-file" id="exampleFormControlFile1" >
+    </div>
+    <input type="submit" value="submit">
+  </form>
+{% endblock %}
